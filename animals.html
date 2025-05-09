@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Registered Animals</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <ul>
+    <li><a href="animals.html">Animal Detials</a></li>
+    <li><a href="health-records.html">Health Records</a></li>
+  </ul>
+
+  <h1>Animal Details</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Animal ID</th>
+        <th>Animal</th>
+        <th>Gender</th>
+        <th>Photo</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody id="animal-table-body">
+     
+    </tbody>
+  </table>
+
+  <script>
+    const animals = [
+      {
+        id: "001",
+        species: "Cow",
+        gender: "Male",
+        image: "images/Cow1.jpeg"
+      },
+      {
+        id: "002",
+        species: "Goat",
+        gender: "Female",
+        image: "images/Goat1.jpg"
+      },
+      {
+        id: "003",
+        species: "Sheep",
+        gender: "Male",
+        image: "images/seep1.jpg"
+      },
+
+        {
+  id: "004",
+  species: "Nguni Cow",
+  gender: "Female",
+  image: "images/Nguni.jpg"
+},
+{
+  id: "005",
+  species: "Damara Sheep",
+  gender: "Male",
+  image: "images/damara.jpg"
+},
+{
+  id: "006",
+  species: "Kalahari Red Goat",
+  gender: "Male",
+  image: "images/kalahari-red.jpg"
+},
+{
+  id: "007",
+  species: "Droughtmaster Bull",
+  gender: "Male",
+  image: "images/droughtmaster.jpg"
+},
+{
+  id: "008",
+  species: "Saanen Goat",
+  gender: "Female",
+  image: "images/saanen.jpeg"
+},
+{
+  id: "009",
+  species: "Brahman Cow",
+  gender: "Female",
+  image: "images/brahman.jpg"
+},
+{
+  id: "010",
+  species: "Dorper Sheep",
+  gender: "Male",
+  image: "images/dorper.jpg"
+}
+
+      
+    ];
+
+    const tbody = document.getElementById("animal-table-body");
+
+    animals.forEach(animal => {
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${animal.id}</td>
+        <td>${animal.species}</td>
+        <td>${animal.gender}</td>
+        <td><img src="${animal.image}" alt="${animal.species}"></td>
+        <td><a href="animal-details.html?id=${animal.id}">View Details</a></td>
+      `;
+      tbody.appendChild(row);
+    });
+  </script>
+
+</body>
+</html>
