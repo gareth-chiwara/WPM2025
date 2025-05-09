@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Livestock Registration System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #34495e;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .form-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        .form-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .section-title {
+            color: #3498db;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -10px 15px;
+        }
+        .form-group {
+            flex: 1 0 calc(50% - 20px);
+            margin: 0 10px 15px;
+            min-width: 200px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .checkbox-group input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .required:after {
+            content: " *";
+            color: #e74c3c;
+        }
+        .form-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #3498db;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .btn-secondary {
+            background-color: #7f8c8d;
+        }
+        .btn-secondary:hover {
+            background-color: #6c7a7d;
+        }
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .login-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #e74c3c;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .form-group {
+                flex: 1 0 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <div class="logo">LivestockManager</div>
+        <nav class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="registration.html" class="active">Registration</a>
+            <a href="login.html">Login</a>
+            <a href="#">Contact</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <h1 class="page-title">Create Your Farm Account</h1>
+        
+        <div class="form-container">
+            <form id="registrationForm" onsubmit="return validateForm()">
+                <!-- Personal Information Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Personal Information</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName" class="required">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                            <div class="error-message" id="firstNameError">Please enter your first name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName" class="required">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                            <div class="error-message" id="lastNameError">Please enter your last name</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email" class="required">Email Address</label>
+                            <input type="email" id="email" name="email" required>
+                            <div class="error-message" id="emailError">Please enter a valid email address</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Phone Number</label>
+                            <input type="tel" id="phone" name="phone">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Farm Details Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Farm Details</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="farmName" class="required">Farm Name</label>
+                            <input type="text" id="farmName" name="farmName" required>
+                            <div class="error-message" id="farmNameError">Please enter your farm name</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="farmType">Farm Type</label>
+                            <select id="farmType" name="farmType">
+                                <option value="">Select farm type</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="beef">Beef</option>
+                                <option value="sheep">Sheep</option>
+                                <option value="goat">Goat</option>
+                                <option value="mixed">Mixed Livestock</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="address" class="required">Farm Address</label>
+                            <input type="text" id="address" name="address" required>
+                            <div class="error-message" id="addressError">Please enter your farm address</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="city" class="required">City</label>
+                            <input type="text" id="city" name="city" required>
+                            <div class="error-message" id="cityError">Please enter your city</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="state" class="required">State/Province</label>
+                            <input type="text" id="state" name="state" required>
+                            <div class="error-message" id="stateError">Please enter your state/province</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zipCode" class="required">Zip/Postal Code</label>
+                            <input type="text" id="zipCode" name="zipCode" required>
+                            <div class="error-message" id="zipCodeError">Please enter your zip/postal code</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="country" class="required">Country</label>
+                            <select id="country" name="country" required>
+                                <option value="">Select country</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="UK">United Kingdom</option>
+                                <option value="AU">Australia</option>
+                                <option value="NZ">New Zealand</option>
+                                <!-- Additional countries would be added here -->
+                            </select>
+                            <div class="error-message" id="countryError">Please select your country</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="farmSize">Approximate Farm Size (acres)</label>
+                            <input type="number" id="farmSize" name="farmSize" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Account Setup Section -->
+                <div class="form-section">
+                    <h2 class="section-title">Account Setup</h2>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="username" class="required">Username</label>
+                            <input type="text" id="username" name="username" required>
+                            <div class="error-message" id="usernameError">Please choose a username (at least 5 characters)</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="password" class="required">Password</label>
+                            <input type="password" id="password" name="password" required>
+                            <div class="error-message" id="passwordError">Password must be at least 8 characters with numbers and letters</div>
+                        </div>
+                        <div class="form-group">
+                            <label for="confirmPassword" class="required">Confirm Password</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" required>
+                            <div class="error-message" id="confirmPasswordError">Passwords do not match</div>
+                        </div>
+                    </div>
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="termsAndConditions" name="termsAndConditions" required>
+                        <label for="termsAndConditions" class="required">I agree to the Terms and Conditions</label>
+                    </div>
+                    <div class="error-message" id="termsError">You must agree to the terms and conditions</div>
+                </div>
+                
+                <div class="form-buttons">
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='index.html'">Cancel</button>
+                    <button type="submit" class="btn">Create Account</button>
+                </div>
+            </form>
+            
+            <div class="login-link">
+                Already have an account? <a href="login.html">Login here</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 LivestockManager. All rights reserved.</p>
+        <p>Contact: <a href="mailto:info@livestockmanager.com">info@livestockmanager.com</a></p>
+    </footer>
+
+    <script>
+        function validateForm() {
+            let isValid = true;
+            
+            // Reset error messages
+            const errorMessages = document.querySelectorAll('.error-message');
+            errorMessages.forEach(error => {
+                error.style.display = 'none';
+            });
+            
+            // Validate first name
+            if (document.getElementById('firstName').value.trim() === '') {
+                document.getElementById('firstNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate last name
+            if (document.getElementById('lastName').value.trim() === '') {
+                document.getElementById('lastNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const email = document.getElementById('email').value.trim();
+            if (email === '' || !emailRegex.test(email)) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate farm name
+            if (document.getElementById('farmName').value.trim() === '') {
+                document.getElementById('farmNameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate address
+            if (document.getElementById('address').value.trim() === '') {
+                document.getElementById('addressError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate city
+            if (document.getElementById('city').value.trim() === '') {
+                document.getElementById('cityError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate state
+            if (document.getElementById('state').value.trim() === '') {
+                document.getElementById('stateError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate zip code
+            if (document.getElementById('zipCode').value.trim() === '') {
+                document.getElementById('zipCodeError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate country
+            if (document.getElementById('country').value === '') {
+                document.getElementById('countryError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate username
+            const username = document.getElementById('username').value.trim();
+            if (username === '' || username.length < 5) {
+                document.getElementById('usernameError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate password
+            const password = document.getElementById('password').value;
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (password === '' || !passwordRegex.test(password)) {
+                document.getElementById('passwordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate confirm password
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            if (confirmPassword === '' || confirmPassword !== password) {
+                document.getElementById('confirmPasswordError').style.display = 'block';
+                isValid = false;
+            }
+            
+            // Validate terms and conditions
+            if (!document.getElementById('termsAndConditions').checked) {
+                document.getElementById('termsError').style.display = 'block';
+                isValid = false;
+            }
+            
+            if (isValid) {
+                alert('Registration successful! Redirecting to login page...');
+                window.location.href = 'login.html';
+            }
+            
+            return false; // Prevent actual form submission since this is a demo
+        }
+    </script>
+</body>
+</html>
