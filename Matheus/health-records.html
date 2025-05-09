@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" type="text/css" href="style3.css">
+  <meta charset="UTF-8">
+  <title>Animal Health Records</title>
+  
+</head>
+<body>
+  <ul>
+    <li><a href="animals.html">Animal Detials</a></li>
+    <li><a href="health-records.html">Health Records</a></li>
+  </ul>
+  <h1>Record Health Event</h1>
+
+  <form id="healthForm">
+    <label for="animalId">Animal ID</label>
+    <input type="text" id="animalId" name="animalId" placeholder="e.g. 001" required>
+
+    <label for="eventType">Event Type</label>
+    <select id="eventType" name="eventType" required>
+      <option value="">-- Select --</option>
+      <option value="Vaccination">Vaccination</option>
+      <option value="Treatment">Treatment</option>
+      <option value="Health Check">Health Check</option>
+      <option value="Other">Other</option>
+    </select>
+
+    <label for="description">Description</label>
+    <textarea id="description" name="description" rows="4" placeholder="Details of the vaccination, treatment or issue..." required></textarea>
+
+    <label for="eventDate">Date</label>
+    <input type="date" id="eventDate" name="eventDate" required>
+
+    <button type="submit">Save Record</button>
+  </form>
+
+  <script>
+    document.getElementById('healthForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      console.log("Health record submitted:", data);
+      alert("Health record submitted for Animal ID: " + data.animalId);
+      this.reset();
+    });
+  </script>
+
+</body>
+</html>
