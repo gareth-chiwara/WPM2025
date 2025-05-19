@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Reports</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+    <h1>Livestock Reports</h1>
+    <nav>
+        <a href="reports.html">Predefined Reports</a>
+        <a href="customreports.html">Custom Reports</a>
+    </nav>
+</header>
+
+<div class="container">
+    <section id="predefined">
+        <h2>Generate Predefined Reports</h2>
+        <form action="generate_predefined_report.php" method="POST">
+            <div class="form-group">
+                <label for="report-type">Select Report Type:</label>
+                <select id="report-type" name="report_type" required>
+                    <option value="">-- Select a Report --</option>
+                    <option value="disease_summary">Disease Summary</option>
+                    <option value="symptoms_report">Symptoms Report</option>
+                    <option value="treatment_effectiveness">Treatment Effectiveness</option>
+                </select>
+            </div>
+            <button type="submit">Generate Report</button>
+        </form>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2025 Livestock Management System</p>
+</footer>
+
+</body>
+</html>
