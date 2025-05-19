@@ -61,12 +61,3 @@ button {
 button:hover {
     background-color: seagreen;
 }
-footer {
-    text-align: center;
-    padding: 5px;
-    background-color: rgba(76, 175, 80, 0.8);
-    color: white;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-}
