@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Livestock Catalog</title>
+    <base target="_self">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@preline/preline@2.0.0/dist/preline.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+    <div class="container mx-auto px-4 py-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Livestock Catalog</h1>
+            <button id="addAnimalBtn" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+                <i class="fas fa-plus mr-2"></i>Add Animal
+            </button>
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 mb-6 transition-all">
+            <div class="flex flex-col md:flex-row gap-4 mb-6">
+                <div class="relative flex-grow">
+                    <input type="text" id="searchInput" placeholder="Search animals..." class="w-full pl-10 pr-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                    <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                </div>
+                <select id="filterType" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="">All Types</option>
+                    <option value="Cow">Cow</option>
+                    <option value="Sheep">Sheep</option>
+                    <option value="Goat">Goat</option>
+                    <option value="Pig">Pig</option>
+                    <option value="Chicken">Chicken</option>
+                </select>
+                <select id="filterStatus" class="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white">
+                    <option value="">All Statuses</option>
+                    <option value="Active">Active</option>
+                    <option value="Sold">Sold</option>
+                    <option value="Deceased">Deceased</option>
+                </select>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                    <thead class="bg-gray-50 dark:bg-gray-700">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">ID</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Name</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Type</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Breed</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Age</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="animalTableBody" class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+                        <!-- Animals will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="pagination" class="flex justify-between items-center mt-4">
+                <div class="text-sm text-gray-500 dark:text-gray-400">
+                    Showing <span id="startItem">1</span> to <span id="endItem">10</span> of <span id="totalItems">0</span> entries
+                </div>
+                <div class="flex space-x-2">
+                    <button id="prevPage" class="px-3 py-1 border rounded-lg disabled:opacity-50" disabled>Previous</button>
+                    <div id="pageNumbers" class="flex space-x-1"></div>
+                    <button id="nextPage" class="px-3 py-1 border rounded-lg disabled:opacity-50" disabled>Next</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Animal Detail Modal -->
+    <div id="animalModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto fade-in">
+            <div class="flex justify-between items-center border-b dark:border-gray-700 p-4">
+                <h3 class="text-xl font-semibold text-gray-800 dark:text-white">Animal Details</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="p-4">
+                <!-- Details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Sample data - in a real app, this would come from your database
+        let animals = [
+            { id: 1, name: "Bessie", type: "Cow", breed: "Holstein", age: 4, status: "Active", weight: "650 kg", lastVetVisit: "2023-05-15", notes: "Healthy, good milk production" },
+            { id: 2, name: "Daisy", type: "Cow", breed: "Jersey", age: 3, status: "Active", weight: "450 kg", lastVetVisit: "2023-06-20", notes: "Recently treated for mild infection" },
+            { id: 3, name: "Woolly", type: "Sheep", breed: "Merino", age: 2, status: "Active", weight: "60 kg", lastVetVisit: "2023-04-10", notes: "Ready for shearing next month" },
+            { id: 4, name: "Billy", type: "Goat", breed: "Boer", age: 1, status: "Active", weight: "40 kg", lastVetVisit: "2023-07-01", notes: "Very active, good appetite" },
+            { id: 5, name: "Porky", type: "Pig", breed: "Duroc", age: 8, status: "Sold", weight: "120 kg", lastVetVisit: "2023-03-15", notes: "Sold to local butcher" },
+            { id: 6, name: "Clucky", type: "Chicken", breed: "Rhode Island Red", age: 1, status: "Active", weight: "2.5 kg", lastVetVisit: "2023-06-05", notes: "Laying well" },
+            { id: 7, name: "Spot", type: "Cow", breed: "Hereford", age: 5, status: "Active", weight: "700 kg", lastVetVisit: "2023-05-28", notes: "Needs hoof trimming soon" },
+            { id: 8, name: "Fluffy", type: "Sheep", breed: "Suffolk", age: 3, status: "Deceased", weight: "55 kg", lastVetVisit: "2023-02-10", notes: "Died of natural causes" },
+            { id: 9, name: "Nanny", type: "Goat", breed: "Nubian", age: 2, status: "Active", weight: "45 kg", lastVetVisit: "2023-06-15", notes: "Recently kidded, doing well" },
+            { id: 10, name: "Bacon", type: "Pig", breed: "Berkshire", age: 6, status: "Active", weight: "110 kg", lastVetVisit: "2023-07-10", notes: "Growing well" }
+        ];
+
+        // Pagination variables
+        let currentPage = 1;
+        const itemsPerPage = 5;
+        let filteredAnimals = [...animals];
+
+        // DOM elements
+        const animalTableBody = document.getElementById('animalTableBody');
+        const searchInput = document.getElementById('searchInput');
+        const filterType = document.getElementById('filterType');
+        const filterStatus = document.getElementById('filterStatus');
+        const prevPageBtn = document.getElementById('prevPage');
+        const nextPageBtn = document.getElementById('nextPage');
+        const pageNumbers = document.getElementById('pageNumbers');
+        const startItem = document.getElementById('startItem');
+        const endItem = document.getElementById('endItem');
+        const totalItems = document.getElementById('totalItems');
+        const animalModal = document.getElementById('animalModal');
+        const modalContent = document.getElementById('modalContent');
+        const closeModal = document.getElementById('closeModal');
+        const addAnimalBtn = document.getElementById('addAnimalBtn');
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            searchInput.addEventListener('input', filterAnimals);
+            filterType.addEventListener('change', filterAnimals);
+            filterStatus.addEventListener('change', filterAnimals);
+            prevPageBtn.addEventListener('click', goToPrevPage);
+            nextPageBtn.addEventListener('click', goToNextPage);
+            closeModal.addEventListener('click', () => animalModal.classList.add('hidden'));
+            addAnimalBtn.addEventListener('click', () => {
+                // This would link to your existing animal addition form
+                alert('Redirecting to your animal addition form...');
+                // window.location.href = 'your-form-page.html';
+            });
+        }
+
+        function filterAnimals() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const typeFilter = filterType.value;
+            const statusFilter = filterStatus.value;
+
+            filteredAnimals = animals.filter(animal => {
+                const matchesSearch = 
+                    animal.name.toLowerCase().includes(searchTerm) ||
+                    animal.breed.toLowerCase().includes(searchTerm) ||
+                    animal.id.toString().includes(searchTerm);
+                
+                const matchesType = typeFilter ? animal.type === typeFilter : true;
+                const matchesStatus = statusFilter ? animal.status === statusFilter : true;
+                
+                return matchesSearch && matchesType && matchesStatus;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function renderTable() {
+            // Calculate pagination
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, filteredAnimals.length);
+            const paginatedAnimals = filteredAnimals.slice(startIndex, endIndex);
+
+            // Clear table
+            animalTableBody.innerHTML = '';
+
+            // Populate table
+            paginatedAnimals.forEach(animal => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-white">${animal.id}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${animal.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${animal.type}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${animal.breed}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">${animal.age} years</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                            ${animal.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                              animal.status === 'Sold' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                              'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}">
+                            ${animal.status}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                        <button class="view-detail mr-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300" data-id="${animal.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="edit-animal mr-2 text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 dark:hover:text-yellow-300" data-id="${animal.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="delete-animal text-red-600 hover:text-red-800 dark:text-red-400 dark:hover:text-red-300" data-id="${animal.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                animalTableBody.appendChild(row);
+            });
+
+            // Add event listeners to the new buttons
+            document.querySelectorAll('.view-detail').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    showAnimalDetails(id);
+                });
+            });
+
+            document.querySelectorAll('.edit-animal').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    editAnimal(id);
+                });
+            });
+
+            document.querySelectorAll('.delete-animal').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const id = parseInt(e.target.closest('button').getAttribute('data-id'));
+                    deleteAnimal(id);
+                });
+            });
+
+            // Update pagination info
+            updatePagination();
+        }
+
+        function updatePagination() {
+            const totalPages = Math.ceil(filteredAnimals.length / itemsPerPage);
+            
+            // Update item counts
+            startItem.textContent = Math.min((currentPage - 1) * itemsPerPage + 1, filteredAnimals.length);
+            endItem.textContent = Math.min(currentPage * itemsPerPage, filteredAnimals.length);
+            totalItems.textContent = filteredAnimals.length;
+            
+            // Update pagination buttons
+            prevPageBtn.disabled = currentPage === 1;
+            nextPageBtn.disabled = currentPage === totalPages || totalPages === 0;
+            
+            // Update page numbers
+            pageNumbers.innerHTML = '';
+            for (let i = 1; i <= totalPages; i++) {
+                const pageBtn = document.createElement('button');
+                pageBtn.className = `px-3 py-1 border rounded-lg ${currentPage === i ? 'bg-blue-600 text-white border-blue-600' : 'hover:bg-gray-100 dark:hover:bg-gray-700'}`;
+                pageBtn.textContent = i;
+                pageBtn.addEventListener('click', () => {
+                    currentPage = i;
+                    renderTable();
+                });
+                pageNumbers.appendChild(pageBtn);
+            }
+        }
+
+        function goToPrevPage() {
+            if (currentPage > 1) {
+                currentPage--;
+                renderTable();
+            }
+        }
+
+        function goToNextPage() {
+            const totalPages = Math.ceil(filteredAnimals.length / itemsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderTable();
+            }
+        }
+
+        function showAnimalDetails(id) {
+            const animal = animals.find(a => a.id === id);
+            if (!animal) return;
+            
+            modalContent.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Basic Information</h4>
+                        <div class="space-y-2">
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">ID:</span> ${animal.id}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Name:</span> ${animal.name}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Type:</span> ${animal.type}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Breed:</span> ${animal.breed}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Age:</span> ${animal.age} years</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Status:</span> 
+                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                    ${animal.status === 'Active' ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' : 
+                                      animal.status === 'Sold' ? 'bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200' :
+                                      'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}">
+                                    ${animal.status}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-semibold text-gray-800 dark:text-white mb-2">Additional Details</h4>
+                        <div class="space-y-2">
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Weight:</span> ${animal.weight}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Last Vet Visit:</span> ${animal.lastVetVisit}</p>
+                            <p><span class="font-medium text-gray-700 dark:text-gray-300">Notes:</span> ${animal.notes}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-6 flex justify-end">
+                    <button class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors" id="closeDetailModal">
+                        Close
+                    </button>
+                </div>
+            `;
+            
+            animalModal.classList.remove('hidden');
+            document.getElementById('closeDetailModal').addEventListener('click', () => {
+                animalModal.classList.add('hidden');
+            });
+        }
+
+        function editAnimal(id) {
+            // In a real app, this would open your edit form
+            alert(`Edit animal with ID: ${id}\nThis would open your edit form.`);
+        }
+
+        function deleteAnimal(id) {
+            if (confirm('Are you sure you want to delete this animal?')) {
+                animals = animals.filter(animal => animal.id !== id);
+                filteredAnimals = filteredAnimals.filter(animal => animal.id !== id);
+                renderTable();
+            }
+        }
+    </script>
+</body>
+</html>
