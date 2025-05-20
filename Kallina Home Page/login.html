@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Livestock Registration System</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            background-color: #34495e;
+        }
+        .login-container {
+            max-width: 500px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        .page-title {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .login-form {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .remember-me input {
+            width: auto;
+            margin-right: 10px;
+        }
+        .forgot-password {
+            display: block;
+            text-align: right;
+            color: #3498db;
+            text-decoration: none;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            background-color: #3498db;
+            color: white;
+            padding: 12px;
+            border-radius: 5px;
+            text-decoration: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        .register-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .register-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: #e74c3c;
+            background-color: #fadbd8;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .footer {
+            background-color: #2c3e50;
+            color: #bdc3c7;
+            padding: 30px 20px;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                padding: 1rem;
+            }
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .login-container {
+                margin: 40px auto;
+            }
+        }
+    </style>
+</head>
+<body>
+   
+    <header class="header">
+        <div class="logo">DigitalBarn</div>
+        <nav class="nav-links">
+            <a href="index.html" class="active">Home</a>
+            <a href="registration.html">Registration</a>
+            <a href="login.html">Login</a>
+            <a href="contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main class="login-container">
+        <h1 class="page-title">Login to Your Account</h1>
+        
+        <div class="error-message" id="error-message">
+            Invalid username or password. Please try again.
+        </div>
+        
+        <form class="login-form" id="login-form" action="dashboard.html" method="POST">
+            <div class="form-group">
+                <label for="username">Username or Email</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            
+            <div class="remember-me">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember">Remember me</label>
+            </div>
+            
+            <a href="forgot-password.html" class="forgot-password">Forgot Password?</a>
+            
+            <div class="form-group">
+                <button type="submit" class="btn">Login</button>
+            </div>
+            
+             <div class="register-link">
+                Don't have an account? <a href="registration.html">Register Now</a>
+            </div>
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>&copy; 2025 Livestock Registration System. All rights reserved.</p>
+        <p>
+            <a href="privacy.html">Privacy Policy</a> | 
+            <a href="terms.html">Terms of Service</a> | 
+            <a href="support.html">Support</a>
+        </p>
+    </footer>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            // For demonstration purposes only
+            // In production, validation would be done server-side
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            if (!username || !password) {
+                event.preventDefault();
+                const errorMessage = document.getElementById('error-message');
+                errorMessage.style.display = 'block';
+                errorMessage.textContent = 'Please enter both username and password.';
+            }
+        });
+    </script>
+</body>
+</html>
