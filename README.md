@@ -17,7 +17,7 @@ A comprehensive web-based livestock management system designed to help farmers e
 - Responsive web design
 
 ## About
-Final year individual project for Bachelor of Informatics at NUST, demonstrating full-stack web development skills and practical problem-solving for real-world agricultural challenges.
+Final year group project for Bachelor of Informatics at NUST, demonstrating full-stack web development skills and practical problem-solving for real-world agricultural challenges.
 
 ## Getting Started
 1. Clone the repository
